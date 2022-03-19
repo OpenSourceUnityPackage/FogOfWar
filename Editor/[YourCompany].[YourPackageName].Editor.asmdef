@@ -1,0 +1,10 @@
+{
+	"name": "[YourCompany].[YourPackageName].Editor",
+	"references": [
+		"[YourCompany].[YourPackageName].Runtime"
+	],
+	"includePlatforms": [
+		"Editor"
+	],
+	"excludePlatforms": []
+}

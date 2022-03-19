@@ -1,0 +1,84 @@
+# Based on mob-sakai and YarnSpinnerTool action
+# Secrets
+#   UNITY_LICENSE:
+name: Run Tests 🧪
+
+on: 
+  push:
+      branches:
+          - main
+          - develop
+          #- 'feature/**'
+      paths:
+        - 'Editor/**'
+        - 'Runtime/**'
+        - 'Samples~/**'
+        - 'Tests/**'
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  workflow_dispatch:
+
+jobs:
+  buildAndTestForSomePlatforms:
+    name: Test on ${{ matrix.unityVersion }} for ${{ matrix.targetPlatform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        unityVersion:
+          - 2018.4.30f1
+          - 2019.1.14f1
+          - 2019.2.21f1
+          - 2019.3.15f1
+          - 2019.4.16f1
+          - 2020.1.17f1
+          - 2020.2.1f1
+        targetPlatform:
+          # - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          # - StandaloneLinux64 # Build a Linux 64-bit standalone.
+          # - iOS # Build an iOS player.
+          # - Android # Build an Android player.
+          # - WebGL # WebGL.
+    steps:
+      # Checkout sandbox project
+      - uses: actions/checkout@v2
+        with:
+          ref: sandbox
+          submodules: true
+          fetch-depth: 0
+
+      # Update package submodule
+      - name: "Update package submodule"
+        working-directory: Packages/dev
+        run: git checkout ${{ github.sha }}
+            
+      # ???
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-${{ matrix.unityVersion }}-${{ github.sha }}
+          restore-keys: |
+            Library-${{ matrix.unityVersion }}-
+            Library-
+            
+      # Run tests
+      - name: "Run tests"
+        uses: game-ci/unity-test-runner@main
+        with:
+          unityVersion: ${{ matrix.unityVersion }}
+          # List of parameters here : https://docs.unity3d.com/Manual/CommandLineArguments.html
+          # assemblyFilters: https://docs.unity3d.com/Packages/com.unity.testtools.codecoverage@0.2/manual/UsingCodeCoverage.html
+          customParameters: -nographics -enableCodeCoverage -coverageOptions assemblyFilters:+TODO_COMPAGNIE_NAME.TODO_PACKAGENAME.*Tests
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      
+      # Upload test results
+      - name: Upload test results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Test results (edit + play, ${{ matrix.unityVersion }}-${{ matrix.targetPlatform }}
+          path: ${{ steps.testRunner.outputs.artifactsPath }}

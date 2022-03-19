@@ -1,0 +1,30 @@
+name: Release ▶️
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+            persist-credentials: false
+      - uses: cycjimmy/semantic-release-action@v3
+        id: semantic   # Need an `id` for output variables
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          extra_plugins: |
+            @semantic-release/changelog
+            @semantic-release/git
+          
+      - name: Log version on published
+        if: steps.semantic.outputs.new_release_published == 'true'
+        run: |
+          echo Version: ${{ steps.semantic.outputs.new_release_version }}
+          echo Major: ${{ steps.semantic.outputs.new_release_major_version }}
+          echo Minor: ${{ steps.semantic.outputs.new_release_minor_version }}
+          echo Patch: ${{ steps.semantic.outputs.new_release_patch_version }}

@@ -1,0 +1,11 @@
+{
+  "name": "[YourCompany].[YourPackageName].Tests",
+  "references": [
+    "[YourCompany].[YourPackageName].Runtime"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": []
+}
