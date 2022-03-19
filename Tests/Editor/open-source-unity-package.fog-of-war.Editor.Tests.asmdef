@@ -1,0 +1,12 @@
+{
+  "name": "open-source-unity-package.fog-of-war.Editor.Tests",
+  "references": [
+    "open-source-unity-package.fog-of-war.Editor",
+    "open-source-unity-package.fog-of-war.Runtime"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": []
+}

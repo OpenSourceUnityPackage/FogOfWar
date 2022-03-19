@@ -1,7 +1,7 @@
 {
-  "name": "[YourCompany].[YourPackageName].Tests",
+  "name": "open-source-unity-package.fog-of-war.Tests",
   "references": [
-    "[YourCompany].[YourPackageName].Runtime"
+    "open-source-unity-package.fog-of-war.Runtime"
   ],
   "optionalUnityReferences": [
     "TestAssemblies"

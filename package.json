@@ -1,16 +1,16 @@
 {
-  "name": "[YourCompany].[YourPackageName]",
-  "displayName": "[YourPackageDisplayName]",
+  "name": "open-source-unity-package.fog-of-war",
+  "displayName": "FogOfWar",
   "description": "",
   "version": "0.0.0",
   "unity": "2020.3",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+[YourHTTPSGit]"
+    "url": "git+https://github.com/OpenSourceUnityPackage/FogOfWar.git"
   },
   "author": {
-    "name": "[YourAuthorName]",
+    "name": "OpenSourceUnityPackage",
     "url": ""
   },
   "dependencies": {},

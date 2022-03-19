@@ -1,0 +1,10 @@
+{
+	"name": "open-source-unity-package.fog-of-war.Editor",
+	"references": [
+		"open-source-unity-package.fog-of-war.Runtime"
+	],
+	"includePlatforms": [
+		"Editor"
+	],
+	"excludePlatforms": []
+}
