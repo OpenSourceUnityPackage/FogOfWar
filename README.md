@@ -23,6 +23,8 @@
 ## What is it ?
 This package is a 2D fog of war for unity based on [video](https://www.youtube.com/watch?v=MUV9Nr-cIGU) of Santzo84.
 ![image](https://user-images.githubusercontent.com/55276408/159159105-2c108f48-c0b8-42bf-a947-1b958e63896b.png)
+![image](https://user-images.githubusercontent.com/55276408/159160591-76dbb6d7-10e7-4c56-a0d9-67078efd0729.png)
+
 
 ## How to use ?
 Add in your scene a fog of war script, right click on it and select "iinstall package settings". 
