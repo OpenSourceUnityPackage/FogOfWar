@@ -2,7 +2,7 @@
   "name": "open-source-unity-package.fog-of-war",
   "displayName": "FogOfWar",
   "description": "",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "unity": "2020.3",
   "license": "MIT",
   "repository": {
@@ -19,9 +19,9 @@
   ],
   "samples": [
     {
-        "displayName": "Demo",
-        "description": "Demo",
-        "path": "Samples~/Demo"
+      "displayName": "Demo",
+      "description": "Demo",
+      "path": "Samples~/Demo"
     }
   ],
   "release": {

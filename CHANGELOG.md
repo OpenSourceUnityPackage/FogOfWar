@@ -1,3 +1,10 @@
+# 1.0.0 (2022-03-20)
+
+
+### Features
+
+* create first version of fog of war ([6f618c9](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/6f618c90a48debfd9cbdb2bf3236ffd56849c7f1))
+
 # Changelog
 All notable changes to this project will be documented in this file.
 
