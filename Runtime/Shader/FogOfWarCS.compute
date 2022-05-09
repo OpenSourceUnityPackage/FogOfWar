@@ -1,0 +1,46 @@
+struct Data
+{
+    float2 position;
+    float sqrMainRadius;
+    float sqrSubRadius;
+};
+
+RWTexture2D<float2> _TextureOut; //r = main, g = sub
+StructuredBuffer<Data> _Datas;
+int _DataCount;
+int _TextureSize;
+
+#pragma kernel mainFogOfWar
+
+float sqrMagnitude(float2 vec)
+{
+    return dot(vec, vec);
+}
+     
+[numthreads(8,8,1)]                            
+void mainFogOfWar (uint2 id : SV_DispatchThreadID)
+{
+    // Clear main fog
+    _TextureOut[id.xy] = float2(0.f, _TextureOut[id.xy].g);
+
+    // Loop on all entities to define pixel color with influence
+    for (int i = 0; i < _DataCount; ++i)
+    {
+        const Data data = _Datas[i];        
+        const float sqrDist = sqrMagnitude(data.position - id.xy / (float)_TextureSize);
+        
+        const float mainDistRatio = sqrDist / data.sqrMainRadius;
+        const float subDistRatio = sqrDist / data.sqrSubRadius;
+
+        const float isMainInside = step(mainDistRatio, 1.f);
+        const float isSubInside = step(subDistRatio, 1.f);
+
+        //const float MainColorValue = isMainInside * (1.f - mainDistRatio);
+        //const float subColorValue = isSubInside * (1.f - subDistRatio);
+
+        _TextureOut[id.xy] = float2(_TextureOut[id.xy].r + isMainInside, _TextureOut[id.xy].g + isSubInside);
+    }
+
+    // Saturate
+    _TextureOut[id.xy] = min(_TextureOut[id.xy], 1.f);
+}
