@@ -84,6 +84,18 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        TerrainFogOfWar terrainFogOfWar = FogTeam2[0];
+        Color[] colors1 = terrainFogOfWar.GetDatas();
+        foreach (Unit unit in m_teamsUnits[(int)ETeam.Team1])
+        {
+            float x = (unit.transform.position.x - terrainFogOfWar.Terrain.GetPosition().x) / (float)terrainFogOfWar.Terrain
+                .terrainData.size.x * (terrainFogOfWar.RenderTexture.width - 1);
+            float y = (unit.transform.position.z - terrainFogOfWar.Terrain.GetPosition().z) / (float)terrainFogOfWar.Terrain
+                .terrainData.size.z * (terrainFogOfWar.RenderTexture.height - 1);
+            
+            unit.gameObject.GetComponent<MeshRenderer>().enabled = colors1[(int)((int)x + (int)y * terrainFogOfWar.RenderTexture.width)].r > 0.5f;
+        }
+        
         // Fog of war
 #if UNITY_EDITOR
         if (m_prevDrawDebug != m_drawDebug)

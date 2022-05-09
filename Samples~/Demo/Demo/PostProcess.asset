@@ -59,6 +59,4 @@ MonoBehaviour:
   settings:
     IsEnabled: 1
     WhenToInsert: 550
-    mainFOW: {fileID: 8400000, guid: 99dc9fa47d0ec534781029ab42e89316, type: 2}
-    subFOW: {fileID: 0}
     material: {fileID: 2100000, guid: ca139478da443654795e9780056ef296, type: 2}
