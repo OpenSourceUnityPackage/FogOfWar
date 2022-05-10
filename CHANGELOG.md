@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.1.0...1.1.1) (2022-05-10)
+
+
+### Bug Fixes
+
+* add URP dependency ([ed7964a](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/ed7964a9ab141f580ca4db980bf418b070fedfe5))
+
 # [1.1.0](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.0.0...1.1.0) (2022-05-10)
 
 
