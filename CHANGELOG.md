@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.0.0...1.1.0) (2022-05-10)
+
+
+### Features
+
+* **URP:** Add postprocess fog of war in URP ([c143376](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/c143376229469053e727991e5ce38f378b49519a))
+
 # 1.0.0 (2022-03-20)
 
 
