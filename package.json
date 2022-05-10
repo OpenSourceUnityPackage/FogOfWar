@@ -13,7 +13,10 @@
     "name": "OpenSourceUnityPackage",
     "url": "https://github.com/OpenSourceUnityPackage"
   },
-  "dependencies": {},
+  "dependencies": 
+  {
+    "com.unity.render-pipelines.universal": "10.8.1"
+  },
   "keywords": [
     ""
   ],
