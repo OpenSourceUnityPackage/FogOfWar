@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 {
     public Camera m_camera;
     private List<Unit>[] m_teamsUnits = new List<Unit>[(int) ETeam.TeamCount];
+    private List<MeshRenderer>[] m_teamsUnitsRenderer = new List<MeshRenderer>[(int) ETeam.TeamCount];
     
     private Terrain[] terrains;
     private TerrainFogOfWar[] FogTeam1;
@@ -66,6 +67,7 @@ public class GameManager : MonoBehaviour
         for (var index = 0; index < m_teamsUnits.Length; index++)
         {
             m_teamsUnits[index] = new List<Unit>();
+            m_teamsUnitsRenderer[index] = new List<MeshRenderer>();
         }
 
         terrains = FindObjectsOfType<Terrain>();
@@ -84,16 +86,28 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        TerrainFogOfWar terrainFogOfWar = FogTeam2[0];
-        Color[] colors1 = terrainFogOfWar.GetDatas();
-        foreach (Unit unit in m_teamsUnits[(int)ETeam.Team1])
+        if (FogTeam1[0].isRendered || FogTeam2[0].isRendered)
         {
-            float x = (unit.transform.position.x - terrainFogOfWar.Terrain.GetPosition().x) / (float)terrainFogOfWar.Terrain
-                .terrainData.size.x * (terrainFogOfWar.RenderTexture.width - 1);
-            float y = (unit.transform.position.z - terrainFogOfWar.Terrain.GetPosition().z) / (float)terrainFogOfWar.Terrain
-                .terrainData.size.z * (terrainFogOfWar.RenderTexture.height - 1);
+            TerrainFogOfWar terrainFogOfWar = FogTeam1[0].isRendered ? FogTeam1[0] : FogTeam2[0];
+            ETeam currentTeam = FogTeam1[0].isRendered ? ETeam.Team2 : ETeam.Team1;
+            ETeam otherTeam = FogTeam1[0].isRendered ? ETeam.Team1 : ETeam.Team2;
+       
+            Color[] colors1 = terrainFogOfWar.GetDatas();
+            foreach (MeshRenderer unitsRenderer in m_teamsUnitsRenderer[(int) currentTeam])
+            {
+                Vector3 position = unitsRenderer.transform.position;
+                float x = (position.x - terrainFogOfWar.Terrain.GetPosition().x) / (float)terrainFogOfWar.Terrain
+                    .terrainData.size.x * (terrainFogOfWar.RenderTexture.width - 1);
+                float y = (position.z - terrainFogOfWar.Terrain.GetPosition().z) / (float)terrainFogOfWar.Terrain
+                    .terrainData.size.z * (terrainFogOfWar.RenderTexture.height - 1);
             
-            unit.gameObject.GetComponent<MeshRenderer>().enabled = colors1[(int)((int)x + (int)y * terrainFogOfWar.RenderTexture.width)].r > 0.5f;
+                unitsRenderer.enabled = colors1[((int)x + (int)y * terrainFogOfWar.RenderTexture.width)].r > 0.5f;
+            }
+
+            foreach (MeshRenderer unitsRenderer in m_teamsUnitsRenderer[(int) otherTeam])
+            {
+                unitsRenderer.enabled = true;
+            }
         }
         
         // Fog of war
@@ -215,6 +229,7 @@ public class GameManager : MonoBehaviour
     public void RegisterUnit(ETeam team, Unit unit)
     {
         m_teamsUnits[(int) team].Add(unit);
+        m_teamsUnitsRenderer[(int) team].Add(unit.GetComponent<MeshRenderer>());
 
         switch (team)
         {
@@ -247,6 +262,7 @@ public class GameManager : MonoBehaviour
     public void UnregisterUnit(ETeam team, Unit unit)
     {
         m_teamsUnits[(int) team].Remove(unit);
+        m_teamsUnitsRenderer[(int) team].Remove(unit.GetComponent<MeshRenderer>());
         switch (team)
         {
             case ETeam.Team1:

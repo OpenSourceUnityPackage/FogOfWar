@@ -3,7 +3,6 @@ Shader "PostProcess/URPFogOfWar"
     Properties
     {
         _MainTex("Main Texture", 2D) = "white" {}
-        _FogOfWar ("fogOfWar", 2D) = "white" {}
     }
 
     SubShader
@@ -42,7 +41,7 @@ Shader "PostProcess/URPFogOfWar"
             }
 
             uniform sampler2D _MainTex;
-            uniform sampler2D _FogOfWar;
+            uniform sampler2D _FogOfWar; // Global uniform shouldn't be exposed
             uniform float4 _TerrainSizePos; //xy = pos, zw = 1/size
             
             float GetFogOfWarFactor(float2 tc)
