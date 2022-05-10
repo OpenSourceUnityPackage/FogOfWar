@@ -3,7 +3,6 @@ Shader "PostProcess/URPFogOfWar"
     Properties
     {
         _MainTex("Main Texture", 2D) = "white" {}
-        _FogOfWar ("fogOfWar", 2D) = "white" {}
     }
 
     SubShader
@@ -42,13 +41,14 @@ Shader "PostProcess/URPFogOfWar"
             }
 
             uniform sampler2D _MainTex;
-            uniform sampler2D _FogOfWar;
+            uniform sampler2D _FogOfWar; // Global uniform shouldn't be exposed
             uniform float4 _TerrainSizePos; //xy = pos, zw = 1/size
             
-            float GetFogOfWarFactor(float2 tc)
+            half GetFogOfWarFactor(float2 tc)
             {
                 const float SUB_FOG_INTENSITY_COEF = 0.5;
-                float2 rg = tex2D(_FogOfWar, tc).rg;
+                const bool isOutside = tc.x < 0 || tc.x > 1 || tc.y < 0 || tc.y > 1;
+                const half2 rg = lerp(tex2D(_FogOfWar, tc).rg, half2(1, 1), isOutside);
                 return lerp(rg.r, rg.g, SUB_FOG_INTENSITY_COEF);
             }
 
@@ -68,7 +68,7 @@ Shader "PostProcess/URPFogOfWar"
                 float3 worldPos = ComputeWorldSpacePosition(UV, depth, UNITY_MATRIX_I_VP);
 
                 float2 fowTC = worldPos.xz * _TerrainSizePos.zw + _TerrainSizePos.xy;
-                float fow = GetFogOfWarFactor(fowTC);
+                half fow = GetFogOfWarFactor(fowTC);
                 half4 col = tex2D(_MainTex, UV) * fow;                
                 return col;
             }

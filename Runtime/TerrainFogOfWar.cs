@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Unity.Profiling;
 using UnityEditor;
@@ -30,6 +29,7 @@ namespace FogOfWarPackage
             }
         }
         public bool lowPrescision = true;
+        public bool isRendered = true;
 
         private List<IFogOfWarEntity> m_fogOfWarEntities = new List<IFogOfWarEntity>();
         private RenderTexture m_renderTexture;
