@@ -4,31 +4,30 @@ using UnityEngine.Rendering.Universal;
 
 namespace FogOfWarPackage
 {
-    public class PostProcessFowOfWarFeature : ScriptableRendererFeature
+    public class PostProcessFogOfWarFeature : ScriptableRendererFeature
     {
         [Serializable]
-        public class MyFeatureSettings
+        public class FeatureSettings
         {
             public bool IsEnabled = true;
             public RenderPassEvent WhenToInsert = RenderPassEvent.AfterRendering;
             public Material material;
+            public TerrainFogOfWar[] terrainFogOfWars;
         }
 
-        public MyFeatureSettings settings = new MyFeatureSettings();
+        public FeatureSettings settings = new FeatureSettings();
 
-        PostProcessFowOfWar FOWRenderPass;
-
+        PostProcessFogOfWar m_fogRenderPass;
 
         public override void Create()
         {
             if (Application.isPlaying)
             {
-                TerrainFogOfWar[] fow = FindObjectsOfType<TerrainFogOfWar>();
-                FOWRenderPass = new PostProcessFowOfWar(
+                m_fogRenderPass = new PostProcessFogOfWar(
                     "Fog of war pass",
                     settings.WhenToInsert,
                     settings.material,
-                    fow
+                    settings.terrainFogOfWars
                 );
             }
         }
@@ -38,8 +37,8 @@ namespace FogOfWarPackage
             if (!settings.IsEnabled || !Application.isPlaying)
                 return;
 
-            FOWRenderPass.Setup(renderer.cameraColorTarget);
-            renderer.EnqueuePass(FOWRenderPass);
+            m_fogRenderPass.Setup(renderer.cameraColorTarget);
+            renderer.EnqueuePass(m_fogRenderPass);
         }
     }
 }

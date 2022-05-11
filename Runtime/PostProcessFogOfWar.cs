@@ -4,7 +4,7 @@ using UnityEngine.Rendering.Universal;
 
 namespace FogOfWarPackage
 {
-    public class PostProcessFowOfWar : ScriptableRenderPass
+    public class PostProcessFogOfWar : ScriptableRenderPass
     {
         string profilerTag;
         
@@ -16,13 +16,13 @@ namespace FogOfWarPackage
         private static readonly int FogOfWarProp = Shader.PropertyToID("_FogOfWar");
         private static readonly int TerrainSizePosProp = Shader.PropertyToID("_TerrainSizePos");
 
-        public PostProcessFowOfWar(string profilerTag,
-            RenderPassEvent renderPassEvent, Material materialFow, TerrainFogOfWar[] terrainsFogOfWar)
+        public PostProcessFogOfWar(string profilerTag,
+            RenderPassEvent renderPassEvent, Material materialFow, TerrainFogOfWar[] terrainFogOfWars)
         {
             this.profilerTag = profilerTag;
             this.renderPassEvent = renderPassEvent;
             this.materialFOW = materialFow;
-            this.terrainsFogOfWar = terrainsFogOfWar;
+            this.terrainsFogOfWar = terrainFogOfWars;
         }
 
         public void Setup(RenderTargetIdentifier source)
@@ -37,7 +37,7 @@ namespace FogOfWarPackage
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (terrainsFogOfWar.Length == 0)
+            if (terrainsFogOfWar == null || terrainsFogOfWar.Length == 0)
                 return;
 
             CommandBuffer cmd = CommandBufferPool.Get(profilerTag);
@@ -47,9 +47,6 @@ namespace FogOfWarPackage
                 // Do post process pass for each terrain (TODO: find a way to optimize)
                 foreach (TerrainFogOfWar terrainFogOfWar in terrainsFogOfWar)
                 {
-                    if (!terrainFogOfWar.isRendered)
-                        continue;
-                    
                     Terrain terrain = terrainFogOfWar.Terrain;
                     TerrainData terrainData = terrain.terrainData;
                     

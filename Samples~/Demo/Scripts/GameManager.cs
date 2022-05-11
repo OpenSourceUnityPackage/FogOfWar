@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FogOfWarPackage;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public enum ETeam : int
 {
@@ -15,7 +17,7 @@ public class GameManager : MonoBehaviour
     public Camera m_camera;
     private List<Unit>[] m_teamsUnits = new List<Unit>[(int) ETeam.TeamCount];
     private List<MeshRenderer>[] m_teamsUnitsRenderer = new List<MeshRenderer>[(int) ETeam.TeamCount];
-    
+
     private Terrain[] terrains;
     private TerrainFogOfWar[] FogTeam1;
     private TerrainFogOfWar[] FogTeam2;
@@ -23,6 +25,11 @@ public class GameManager : MonoBehaviour
     private float m_GUIUpdateTimerMax = 3f;
     private float m_GUIUpdateTimerCurrent = 3f;
     private Vector2[] m_stats;
+        
+    [SerializeField] ForwardRendererData m_rendererData;
+    private PostProcessFogOfWarFeature m_fowFeature;
+    
+    public bool renderTeam1 = true;
     
 #if UNITY_EDITOR
     private static readonly int s_shaderPropertyMap1 = Shader.PropertyToID("_Map1");
@@ -84,32 +91,44 @@ public class GameManager : MonoBehaviour
     }
 
 
+    private void OnEnable()
+    {
+        m_fowFeature = m_rendererData.rendererFeatures.OfType<PostProcessFogOfWarFeature>().FirstOrDefault();
+     
+        if (m_fowFeature == null)
+            return;
+         
+        m_fowFeature.settings.terrainFogOfWars = FogTeam1;
+        m_rendererData.SetDirty();
+    }
+
+
     private void Update()
     {
-        if (FogTeam1[0].isRendered || FogTeam2[0].isRendered)
-        {
-            TerrainFogOfWar terrainFogOfWar = FogTeam1[0].isRendered ? FogTeam1[0] : FogTeam2[0];
-            ETeam currentTeam = FogTeam1[0].isRendered ? ETeam.Team2 : ETeam.Team1;
-            ETeam otherTeam = FogTeam1[0].isRendered ? ETeam.Team1 : ETeam.Team2;
-       
-            Color[] colors1 = terrainFogOfWar.GetDatas();
-            foreach (MeshRenderer unitsRenderer in m_teamsUnitsRenderer[(int) currentTeam])
-            {
-                Vector3 position = unitsRenderer.transform.position;
-                float x = (position.x - terrainFogOfWar.Terrain.GetPosition().x) / (float)terrainFogOfWar.Terrain
-                    .terrainData.size.x * (terrainFogOfWar.RenderTexture.width - 1);
-                float y = (position.z - terrainFogOfWar.Terrain.GetPosition().z) / (float)terrainFogOfWar.Terrain
-                    .terrainData.size.z * (terrainFogOfWar.RenderTexture.height - 1);
-            
-                unitsRenderer.enabled = colors1[((int)x + (int)y * terrainFogOfWar.RenderTexture.width)].r > 0.5f;
-            }
-
-            foreach (MeshRenderer unitsRenderer in m_teamsUnitsRenderer[(int) otherTeam])
-            {
-                unitsRenderer.enabled = true;
-            }
-        }
+        m_fowFeature.settings.terrainFogOfWars = renderTeam1 ? FogTeam1 : FogTeam2;
+        m_rendererData.SetDirty();
         
+        TerrainFogOfWar terrainFogOfWar = renderTeam1 ? FogTeam1[0] : FogTeam2[0];
+        ETeam currentTeam = renderTeam1 ? ETeam.Team2 : ETeam.Team1;
+        ETeam otherTeam = renderTeam1 ? ETeam.Team1 : ETeam.Team2;
+   
+        Color[] colors1 = terrainFogOfWar.GetDatas();
+        foreach (MeshRenderer unitsRenderer in m_teamsUnitsRenderer[(int) currentTeam])
+        {
+            Vector3 position = unitsRenderer.transform.position;
+            float x = (position.x - terrainFogOfWar.Terrain.GetPosition().x) / (float)terrainFogOfWar.Terrain
+                .terrainData.size.x * (terrainFogOfWar.RenderTexture.width - 1);
+            float y = (position.z - terrainFogOfWar.Terrain.GetPosition().z) / (float)terrainFogOfWar.Terrain
+                .terrainData.size.z * (terrainFogOfWar.RenderTexture.height - 1);
+        
+            unitsRenderer.enabled = colors1[((int)x + (int)y * terrainFogOfWar.RenderTexture.width)].r > 0.5f;
+        }
+
+        foreach (MeshRenderer unitsRenderer in m_teamsUnitsRenderer[(int) otherTeam])
+        {
+            unitsRenderer.enabled = true;
+        }
+
         // Fog of war
 #if UNITY_EDITOR
         if (m_prevDrawDebug != m_drawDebug)
