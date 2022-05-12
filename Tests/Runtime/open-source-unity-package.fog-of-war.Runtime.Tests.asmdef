@@ -1,5 +1,6 @@
 {
-  "name": "open-source-unity-package.fog-of-war.Tests",
+  "name": "open-source-unity-package.fog-of-war.Runtime.Tests",
+  "rootNamespace": "FogOfWarPackage",
   "references": [
     "open-source-unity-package.fog-of-war.Runtime"
   ],

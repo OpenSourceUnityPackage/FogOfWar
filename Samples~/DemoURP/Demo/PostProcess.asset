@@ -1,5 +1,24 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4116476288751341007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9085cdd597407b449c8ac6a40119c2c, type: 3}
+  m_Name: PostProcessFogOfWarFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    IsEnabled: 1
+    WhenToInsert: 550
+    material: {fileID: 2100000, guid: 1534b02085d383a48bb4d226315bbc22, type: 2}
+    terrainFogOfWars:
+    - {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13,8 +32,8 @@ MonoBehaviour:
   m_Name: PostProcess
   m_EditorClassIdentifier: 
   m_RendererFeatures:
-  - {fileID: 3889229903900253015}
-  m_RendererFeatureMap: 571bcdd7fd51f935
+  - {fileID: -4116476288751341007}
+  m_RendererFeatureMap: 3172a81aa056dfc6
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   shaders:

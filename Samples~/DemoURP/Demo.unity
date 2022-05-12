@@ -153,6 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_camera: {fileID: 817550761}
+  m_rendererData: {fileID: 11400000, guid: 2f47a0a10b49c7340a830e3ba5160dd8, type: 2}
+  renderTeam1: 1
   m_drawDebug: 0
 --- !u!4 &377053535
 Transform:
@@ -233,7 +235,6 @@ MonoBehaviour:
   shader: {fileID: 7200000, guid: 2b07c0bbef7ec0b4ba96d3d8cc927376, type: 3}
   resolution: 8
   lowPrescision: 1
-  isRendered: 1
   m_drawDebug: 0
 --- !u!154 &548463008
 TerrainCollider:
@@ -255,7 +256,7 @@ Terrain:
   m_GameObject: {fileID: 548463006}
   m_Enabled: 1
   serializedVersion: 6
-  m_TerrainData: {fileID: 0}
+  m_TerrainData: {fileID: 15600000, guid: 48bf1876c0771e64c8c82b8225dfe3b5, type: 2}
   m_TreeDistance: 5000
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5
@@ -308,7 +309,6 @@ MonoBehaviour:
   shader: {fileID: 7200000, guid: 2b07c0bbef7ec0b4ba96d3d8cc927376, type: 3}
   resolution: 8
   lowPrescision: 1
-  isRendered: 0
   m_drawDebug: 0
 --- !u!1001 &754943466
 PrefabInstance:

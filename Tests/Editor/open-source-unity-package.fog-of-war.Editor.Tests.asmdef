@@ -1,5 +1,6 @@
 {
   "name": "open-source-unity-package.fog-of-war.Editor.Tests",
+  "rootNamespace": "FogOfWarPackage",
   "references": [
     "open-source-unity-package.fog-of-war.Editor",
     "open-source-unity-package.fog-of-war.Runtime"

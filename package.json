@@ -21,9 +21,14 @@
   ],
   "samples": [
     {
-      "displayName": "Demo",
-      "description": "Demo",
-      "path": "Samples~/Demo"
+      "displayName": "Demo URP",
+      "description": "Demo for the Universal render pipeline",
+      "path": "Samples~/DemoURP"
+    },
+    {
+      "displayName": "URP",
+      "description": "Contains sample shaders for the Universal render pipeline",
+      "path": "Samples~/URP"
     }
   ],
   "release": {

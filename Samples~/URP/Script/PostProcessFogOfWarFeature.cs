@@ -10,9 +10,9 @@ namespace FogOfWarPackage
         public class FeatureSettings
         {
             public bool IsEnabled = true;
-            public RenderPassEvent WhenToInsert = RenderPassEvent.AfterRendering;
+            public RenderPassEvent WhenToInsert = RenderPassEvent.BeforeRenderingPostProcessing;
             public Material material;
-            public TerrainFogOfWar[] terrainFogOfWars;
+            [HideInInspector] public TerrainFogOfWar[] terrainFogOfWars;
         }
 
         public FeatureSettings settings = new FeatureSettings();
