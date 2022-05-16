@@ -1,3 +1,20 @@
+# [1.2.0](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.1.1...1.2.0) (2022-05-16)
+
+
+### Bug Fixes
+
+* clamp shader to terrain border ([eea4b63](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/eea4b63eb25a2348ad0f107190f3290dc1c0b74b))
+* Fix URP assembly ([7db0161](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/7db0161718146266084f2ac2f6ff77b99eff991c))
+* remove IsRendered and add ability to set terrain from settings ([e598b44](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/e598b4445ae512059a2564e642bd98c2d4143db9))
+* **URP:** fix terrain position in shader and assembly referencies ([90e60cf](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/90e60cf2209a4d6d71d15dd2f888c0f788a9d2c9))
+
+
+### Features
+
+* add HDRP support ([4717756](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/47177569fad283999d23990d5b99ea1db11a20e0))
+* Move URP code to sample and create URP demo ([c159d5a](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/c159d5a0af3e1917e419c1ff557dea990bfd0952))
+* Refacto code and add hability to render multiple fog of war map ([eff3e84](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/eff3e84bf817c489254d222a345ea14123c74193))
+
 ## [1.1.1](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.1.0...1.1.1) (2022-05-10)
 
 
