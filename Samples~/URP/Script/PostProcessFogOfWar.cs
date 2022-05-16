@@ -52,7 +52,7 @@ namespace FogOfWarPackage
                     
                     cmd.SetGlobalTexture(FogOfWarProp, terrainFogOfWar.RenderTexture);
                     cmd.SetGlobalVector(TerrainSizePosProp,
-                        new Vector4(terrain.GetPosition().x, terrain.GetPosition().z, 1 / terrainData.size.x,
+                        new Vector4(-terrain.GetPosition().x, -terrain.GetPosition().z, 1 / terrainData.size.x,
                             1 / terrainData.size.z));
 
                     cmd.Blit(source, tempTexture.Identifier(), materialFOW, 0);

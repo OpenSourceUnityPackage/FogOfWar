@@ -47,7 +47,7 @@ Shader "PostProcess/URPFogOfWar"
             half GetFogOfWarFactor(float2 tc)
             {
                 const float SUB_FOG_INTENSITY_COEF = 0.5;
-                const bool isOutside = tc.x < 0 || tc.x > 1 || tc.y < 0 || tc.y > 1;
+                const bool isOutside = tc.x < 0 || tc.x > 1 || tc.y < 0 || tc.y > 1; // TODO: Need to check if depth is inf
                 const half2 rg = lerp(tex2D(_FogOfWar, tc).rg, half2(1, 1), isOutside);
                 return lerp(rg.r, rg.g, SUB_FOG_INTENSITY_COEF);
             }
@@ -67,7 +67,7 @@ Shader "PostProcess/URPFogOfWar"
                 // Reconstruct the world space positions.
                 float3 worldPos = ComputeWorldSpacePosition(UV, depth, UNITY_MATRIX_I_VP);
 
-                float2 fowTC = worldPos.xz * _TerrainSizePos.zw + _TerrainSizePos.xy;
+                float2 fowTC = (worldPos.xz + _TerrainSizePos.xy) * _TerrainSizePos.zw;
                 half fow = GetFogOfWarFactor(fowTC);
                 half4 col = tex2D(_MainTex, UV) * fow;                
                 return col;
