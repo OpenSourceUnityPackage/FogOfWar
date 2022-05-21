@@ -1,0 +1,87 @@
+name: Run Tests 🧪
+
+on: 
+  push:
+      branches:
+          - main
+          - develop
+          #- 'feature/**'
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  workflow_dispatch:
+
+jobs:
+  buildAndTestForSomePlatforms:
+    name: Test Unity version ${{ matrix.unityVersion }} | Platform ${{ matrix.targetPlatform }} | Test mode ${{ matrix.testMode }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        testMode:
+          - all
+          #- playmode
+          #- editmode
+        unityVersion:
+          # Main LTS version : https://unity3d.com/unity/qa/lts-releases
+          - 2019.4.38f1
+          - 2020.3.33f1
+          - 2021.3.1f1
+        projectPath:
+          - package/${{ github.event.repository.name }}
+          
+    steps:
+      # Checkout sandbox project
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+          
+      # Caching dependencies and build outputs to improve workflow execution time           
+      - uses: actions/cache@v3
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}
+          restore-keys: |
+            Library-
+
+      # Fix bug with test runner that canno't access to license if project is not into a directory    
+      - name: copy project into new directory
+        run: |
+          pwd
+          folderName=$(echo "${PWD##*/}")
+          rsync -r "$GITHUB_WORKSPACE" "package" 
+          ls -F "package/$folderName"
+      
+      # Fail if sample is not call sample~ or sample.meta is found
+      - name: Check sample folder
+        run: |
+          if [ -f ${{ matrix.projectPath }}/Sample.meta ];
+          then
+             echo "Sample.meta exist. Please remove it from your project"
+             exit 1
+          fi
+          
+          if [ -d ${{ matrix.projectPath }}/Sample/ ];
+          then
+             echo "Sample.meta exist. Please ensure this folder is hiding for unity renaming it Sample~. Also ensure that meta Sample.meta doesn't exist"
+             exit 1
+          fi
+          
+          echo "Sample folder ok"
+            
+      # Run tests
+      - name: "Run tests"
+        id: runTests
+        uses: trudeaua21/unity-test-runner@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          unityVersion: ${{ matrix.unityVersion }}
+          projectPath: ${{ matrix.projectPath }}
+          testMode: ${{ matrix.testMode }}
+          packageMode: true
+           # List of parameters here : https://docs.unity3d.com/Manual/CommandLineArguments.html
+          customParameters: -nographics
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
