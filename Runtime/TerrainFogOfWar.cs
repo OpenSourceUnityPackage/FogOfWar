@@ -148,7 +148,10 @@ namespace FogOfWarPackage
             texture.Apply();
          
             RenderTexture.active = null; // added to avoid errors
-            return texture.GetPixels();
+            Color[] rst = texture.GetPixels();
+            Texture2D.Destroy(texture);
+
+            return rst;
         }
 
         private void GenerateRenderTexture()
