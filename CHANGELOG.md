@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.2.0...1.2.1) (2022-06-08)
+
+
+### Bug Fixes
+
+* texture leak ([1629811](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/16298116575fd873dd6aaaa6427fd731f8aec094))
+
 # [1.2.0](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.1.1...1.2.0) (2022-05-16)
 
 
