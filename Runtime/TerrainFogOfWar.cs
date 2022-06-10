@@ -1,16 +1,19 @@
 using System.Collections.Generic;
 using Unity.Profiling;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Rendering;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace FogOfWarPackage
 {
     [RequireComponent(typeof(Terrain))]
     public class TerrainFogOfWar : MonoBehaviour
     {
-        public ComputeShader m_computShader;
+        public ComputeShader m_computeShader;
         
         [SerializeField, OnRangeChangedCall(3, 14, "GenerateRenderTexture")]
         [Tooltip("2^resolution is the size of renderTexture used. 3 is size of 8, 4 is 16, 5 is 32...")]
@@ -64,7 +67,7 @@ namespace FogOfWarPackage
         #region MonoBehaviour
         private void Awake()
         {
-            m_kernelIndex = m_computShader.FindKernel("mainFogOfWar");
+            m_kernelIndex = m_computeShader.FindKernel("mainFogOfWar");
             m_terrain = GetComponent<Terrain>(); ;
             Assert.IsFalse(m_terrain.terrainData.size.x != m_terrain.terrainData.size.z, "Terrain need to be squared to process disc as fast as possible");
         }
@@ -99,11 +102,11 @@ namespace FogOfWarPackage
             {
                 CommandBuffer commandBuffer = new CommandBuffer();
                 commandBuffer.name = s_cmdName;
-                commandBuffer.SetComputeIntParam(m_computShader, s_shaderPropertyDataCount, m_Datas.count);
-                commandBuffer.SetComputeIntParam(m_computShader, s_shaderPropertyTextureSize, resol);
-                commandBuffer.SetComputeBufferParam(m_computShader, m_kernelIndex, s_shaderPropertyDatas, m_Datas);
-                commandBuffer.SetComputeTextureParam(m_computShader, m_kernelIndex, s_shaderPropertyTextureOut, m_renderTexture);
-                commandBuffer.DispatchCompute(m_computShader, m_kernelIndex, resol / 8, resol / 8, 1);
+                commandBuffer.SetComputeIntParam(m_computeShader, s_shaderPropertyDataCount, m_Datas.count);
+                commandBuffer.SetComputeIntParam(m_computeShader, s_shaderPropertyTextureSize, resol);
+                commandBuffer.SetComputeBufferParam(m_computeShader, m_kernelIndex, s_shaderPropertyDatas, m_Datas);
+                commandBuffer.SetComputeTextureParam(m_computeShader, m_kernelIndex, s_shaderPropertyTextureOut, m_renderTexture);
+                commandBuffer.DispatchCompute(m_computeShader, m_kernelIndex, resol / 8, resol / 8, 1);
                 Graphics.ExecuteCommandBuffer(commandBuffer);
             }
 
