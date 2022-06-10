@@ -1,16 +1,13 @@
 {
-    "name": "open-source-unity-package.fog-of-war.Editor.Tests",
+    "name": "open-source-unity-package.fog-of-war.Runtime.Tests",
     "rootNamespace": "",
     "references": [
-        "open-source-unity-package.fog-of-war.Editor",
         "open-source-unity-package.fog-of-war.Runtime",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],
     "includePlatforms": [],
-    "excludePlatforms": [
-        "Editor"
-    ],
+    "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
