@@ -12,7 +12,7 @@ int _TextureSize;
 
 #pragma kernel mainFogOfWar
 
-float sqrMagnitude(float2 vec)
+inline float sqrMagnitude(float2 vec)
 {
     return dot(vec, vec);
 }
@@ -34,9 +34,6 @@ void mainFogOfWar (uint2 id : SV_DispatchThreadID)
 
         const float isMainInside = step(mainDistRatio, 1.f);
         const float isSubInside = step(subDistRatio, 1.f);
-
-        //const float MainColorValue = isMainInside * (1.f - mainDistRatio);
-        //const float subColorValue = isSubInside * (1.f - subDistRatio);
 
         _TextureOut[id.xy] = float2(_TextureOut[id.xy].r + isMainInside, _TextureOut[id.xy].g + isSubInside);
     }

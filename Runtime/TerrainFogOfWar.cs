@@ -10,24 +10,12 @@ namespace FogOfWarPackage
     [RequireComponent(typeof(Terrain))]
     public class TerrainFogOfWar : MonoBehaviour
     {
-        public ComputeShader shader;
+        public ComputeShader m_computShader;
         
         [SerializeField, OnRangeChangedCall(3, 14, "GenerateRenderTexture")]
         [Tooltip("2^resolution is the size of renderTexture used. 3 is size of 8, 4 is 16, 5 is 32...")]
         private int resolution = 8;
         
-        public int Resolution
-        {
-            get
-            {
-                return TwoPowX(resolution);
-            }
-            set
-            {
-                resolution = value;
-                GenerateRenderTexture();
-            }
-        }
         public bool lowPrescision = true;
 
         private List<IFogOfWarEntity> m_fogOfWarEntities = new List<IFogOfWarEntity>();
@@ -47,7 +35,18 @@ namespace FogOfWarPackage
         
         private static readonly string s_cmdName = "Process fog of war";
         
-
+        public int Resolution
+        {
+            get
+            {
+                return TwoPowX(resolution);
+            }
+            set
+            {
+                resolution = value;
+                GenerateRenderTexture();
+            }
+        }
 #if UNITY_EDITOR
         private static readonly int s_shaderPropertyTexture = Shader.PropertyToID("_Texture");
 
@@ -65,7 +64,7 @@ namespace FogOfWarPackage
         #region MonoBehaviour
         private void Awake()
         {
-            m_kernelIndex = shader.FindKernel("mainFogOfWar");
+            m_kernelIndex = m_computShader.FindKernel("mainFogOfWar");
             m_terrain = GetComponent<Terrain>(); ;
             Assert.IsFalse(m_terrain.terrainData.size.x != m_terrain.terrainData.size.z, "Terrain need to be squared to process disc as fast as possible");
         }
@@ -100,11 +99,11 @@ namespace FogOfWarPackage
             {
                 CommandBuffer commandBuffer = new CommandBuffer();
                 commandBuffer.name = s_cmdName;
-                commandBuffer.SetComputeIntParam(shader, s_shaderPropertyDataCount, m_Datas.count);
-                commandBuffer.SetComputeIntParam(shader, s_shaderPropertyTextureSize, resol);
-                commandBuffer.SetComputeBufferParam(shader, m_kernelIndex, s_shaderPropertyDatas, m_Datas);
-                commandBuffer.SetComputeTextureParam(shader, m_kernelIndex, s_shaderPropertyTextureOut, m_renderTexture);
-                commandBuffer.DispatchCompute(shader, m_kernelIndex, resol / 8, resol / 8, 1);
+                commandBuffer.SetComputeIntParam(m_computShader, s_shaderPropertyDataCount, m_Datas.count);
+                commandBuffer.SetComputeIntParam(m_computShader, s_shaderPropertyTextureSize, resol);
+                commandBuffer.SetComputeBufferParam(m_computShader, m_kernelIndex, s_shaderPropertyDatas, m_Datas);
+                commandBuffer.SetComputeTextureParam(m_computShader, m_kernelIndex, s_shaderPropertyTextureOut, m_renderTexture);
+                commandBuffer.DispatchCompute(m_computShader, m_kernelIndex, resol / 8, resol / 8, 1);
                 Graphics.ExecuteCommandBuffer(commandBuffer);
             }
 
@@ -244,7 +243,6 @@ namespace FogOfWarPackage
         {
             return 1 << power;
         }
-
         
         // From https://codereview.stackexchange.com/questions/145809/high-performance-branchless-intersection-testing-sphere-aabb-aabb-aabb
         static bool IsDiscInsideAABB(Vector2 discCenter, float discRadius, Vector2 rectMin, Vector2 rectMax)
