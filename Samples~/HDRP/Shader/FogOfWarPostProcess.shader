@@ -6,9 +6,7 @@ Shader "Hidden/Shader/FogOfWarPostProcess"
     #pragma only_renderers d3d11 playstation xboxone xboxseries vulkan metal switch
 
     #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
-    #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
     #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
-    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/PostProcessing/Shaders/FXAA.hlsl"
     #include "Packages/com.unity.render-pipelines.high-definition/Runtime/PostProcessing/Shaders/RTUpscale.hlsl"
 
     struct Attributes
@@ -41,15 +39,17 @@ Shader "Hidden/Shader/FogOfWarPostProcess"
     uniform sampler2D _FogOfWar; // Global uniform shouldn't be exposed
     uniform float4 _TerrainSizePos; //xy = pos, zw = 1/size
 
-    half GetFogOfWarFactor(float2 tc)
+    half GetFogOfWarFactor(float2 tc, float depth)
     {
         const float SUB_FOG_INTENSITY_COEF = 0.5;
-        const bool isOutside = tc.x < 0 || tc.x > 1 || tc.y < 0 || tc.y > 1;
+
+        // Check with depth allow to avoid to render fow in unit square on the background
+        const bool isOutside = tc.x < 0 || tc.x > 1 || tc.y < 0 || tc.y > 1 || depth == 0.0f;
         const half2 rg = lerp(tex2D(_FogOfWar, tc).rg, half2(1, 1), isOutside);
         return lerp(rg.r, rg.g, SUB_FOG_INTENSITY_COEF);
     }
     
-    float4 CustomPostProcess(Varyings input) : SV_Target
+    float4 FOWPostProcess(Varyings input) : SV_Target
     {
         UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
 
@@ -62,7 +62,7 @@ Shader "Hidden/Shader/FogOfWarPostProcess"
         float3 worldPos = ComputeWorldSpacePosition(input.texcoord, depth, UNITY_MATRIX_I_VP);
 
         float2 fowTC = (worldPos.xz + _TerrainSizePos.xy) * _TerrainSizePos.zw;
-        half fow = GetFogOfWarFactor(fowTC);
+        half fow = GetFogOfWarFactor(fowTC, depth);
         outColor = outColor * fow;
 
         return float4(outColor  * _Intensity,  1.0);
@@ -82,7 +82,7 @@ Shader "Hidden/Shader/FogOfWarPostProcess"
             Cull Off
 
             HLSLPROGRAM
-                #pragma fragment CustomPostProcess
+                #pragma fragment FOWPostProcess
                 #pragma vertex Vert
             ENDHLSL
         }

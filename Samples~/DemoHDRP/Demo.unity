@@ -232,9 +232,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 775d0091b2a336245980dce68792b76a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shader: {fileID: 7200000, guid: 2b07c0bbef7ec0b4ba96d3d8cc927376, type: 3}
+  m_computeShader: {fileID: 7200000, guid: 2b07c0bbef7ec0b4ba96d3d8cc927376, type: 3}
   resolution: 8
-  lowPrescision: 1
+  lowPrecision: 1
   m_drawDebug: 0
 --- !u!154 &548463008
 TerrainCollider:
@@ -306,9 +306,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 775d0091b2a336245980dce68792b76a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shader: {fileID: 7200000, guid: 2b07c0bbef7ec0b4ba96d3d8cc927376, type: 3}
+  m_computeShader: {fileID: 7200000, guid: 2b07c0bbef7ec0b4ba96d3d8cc927376, type: 3}
   resolution: 8
-  lowPrescision: 1
+  lowPrecision: 1
   m_drawDebug: 0
 --- !u!1001 &689587257
 PrefabInstance:
