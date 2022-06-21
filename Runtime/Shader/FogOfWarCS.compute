@@ -12,13 +12,13 @@ int _TextureSize;
 
 #pragma kernel mainFogOfWar
 
-inline float sqrMagnitude(float2 vec)
+inline float sqrMagnitude(const float2 vec)
 {
     return dot(vec, vec);
 }
      
 [numthreads(8,8,1)]                            
-void mainFogOfWar (uint2 id : SV_DispatchThreadID)
+void mainFogOfWar (const uint2 id : SV_DispatchThreadID)
 {
     // Clear main fog
     _TextureOut[id.xy] = float2(0.f, _TextureOut[id.xy].g);

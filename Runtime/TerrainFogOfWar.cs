@@ -19,13 +19,11 @@ namespace FogOfWarPackage
         [Tooltip("2^resolution is the size of renderTexture used. 3 is size of 8, 4 is 16, 5 is 32...")]
         private int resolution = 8;
         
-        public bool lowPrescision = true;
+        public bool lowPrecision = true;
 
-        private List<IFogOfWarEntity> m_fogOfWarEntities = new List<IFogOfWarEntity>();
-        private RenderTexture m_renderTexture;
-        
+        private readonly List<IFogOfWarEntity> m_fogOfWarEntities = new List<IFogOfWarEntity>();
+
         private ComputeBuffer m_Datas;
-        private Terrain m_terrain;
         private int m_kernelIndex;
 
         static readonly ProfilerMarker s_PreparePerfMarker =
@@ -35,15 +33,12 @@ namespace FogOfWarPackage
         private static readonly int s_shaderPropertyTextureSize = Shader.PropertyToID("_TextureSize");
         private static readonly int s_shaderPropertyDatas = Shader.PropertyToID("_Datas");
         private static readonly int s_shaderPropertyTextureOut = Shader.PropertyToID("_TextureOut");
-        
-        private static readonly string s_cmdName = "Process fog of war";
-        
+
+        private const string s_cmdName = "Process fog of war";
+
         public int Resolution
         {
-            get
-            {
-                return TwoPowX(resolution);
-            }
+            get => TwoPowX(resolution);
             set
             {
                 resolution = value;
@@ -61,33 +56,31 @@ namespace FogOfWarPackage
         private Material m_debugMaterial;
 #endif
 
-        public RenderTexture RenderTexture { get => m_renderTexture; }
-        public Terrain Terrain { get => m_terrain; }
+        public RenderTexture RenderTexture { get; private set; }
+        public Terrain Terrain { get; private set; }
 
         #region MonoBehaviour
         private void Awake()
         {
             m_kernelIndex = m_computeShader.FindKernel("mainFogOfWar");
-            m_terrain = GetComponent<Terrain>(); ;
-            Assert.IsFalse(m_terrain.terrainData.size.x != m_terrain.terrainData.size.z, "Terrain need to be squared to process disc as fast as possible");
+            Terrain = GetComponent<Terrain>();
+            Assert.IsFalse(Terrain.terrainData.size.x != Terrain.terrainData.size.z, "Terrain need to be squared to process disc as fast as possible");
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             GenerateRenderTexture();
         }
 
         private void OnDisable()
         {
-            if (m_Datas != null)
-            {
-                m_Datas.Dispose();
-                m_Datas = null;
-            }
+            if (m_Datas == null) return;
+            m_Datas.Dispose();
+            m_Datas = null;
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             if (m_fogOfWarEntities.Count == 0)
                 return;
@@ -100,12 +93,11 @@ namespace FogOfWarPackage
             
             using (s_PreparePerfMarker.Auto())
             {
-                CommandBuffer commandBuffer = new CommandBuffer();
-                commandBuffer.name = s_cmdName;
+                CommandBuffer commandBuffer = new CommandBuffer {name = s_cmdName};
                 commandBuffer.SetComputeIntParam(m_computeShader, s_shaderPropertyDataCount, m_Datas.count);
                 commandBuffer.SetComputeIntParam(m_computeShader, s_shaderPropertyTextureSize, resol);
                 commandBuffer.SetComputeBufferParam(m_computeShader, m_kernelIndex, s_shaderPropertyDatas, m_Datas);
-                commandBuffer.SetComputeTextureParam(m_computeShader, m_kernelIndex, s_shaderPropertyTextureOut, m_renderTexture);
+                commandBuffer.SetComputeTextureParam(m_computeShader, m_kernelIndex, s_shaderPropertyTextureOut, RenderTexture);
                 commandBuffer.DispatchCompute(m_computeShader, m_kernelIndex, resol / 8, resol / 8, 1);
                 Graphics.ExecuteCommandBuffer(commandBuffer);
             }
@@ -120,30 +112,40 @@ namespace FogOfWarPackage
                     if (m_debugMaterial == null)
                         m_debugMaterial = new Material(Shader.Find("Debug/DebugFogOfWar"));
 
-                    m_prevTerrainMaterial = m_terrain.materialTemplate;
-                    m_terrain.materialTemplate = m_debugMaterial;
-                    m_terrain.materialTemplate.SetTexture(s_shaderPropertyTexture, m_renderTexture);
+                    m_prevTerrainMaterial = Terrain.materialTemplate;
+                    Terrain.materialTemplate = m_debugMaterial;
+                    Terrain.materialTemplate.SetTexture(s_shaderPropertyTexture, RenderTexture);
                 }
                 else
                 {
-                    m_terrain.materialTemplate = m_prevTerrainMaterial;
+                    Terrain.materialTemplate = m_prevTerrainMaterial;
                 }
             }
 #endif
         }
 #endregion
 
+        public void RegisterEntity(IFogOfWarEntity fogOfWarEntity)
+        {
+            m_fogOfWarEntities.Add(fogOfWarEntity);
+        }
+
+        public void UnregisterEntity(IFogOfWarEntity fogOfWarEntity)
+        {
+            m_fogOfWarEntities.Remove(fogOfWarEntity);
+        }
+
         public Color[] GetDatas()
         {
-            return GetDatas(0, 0, m_renderTexture.width, m_renderTexture.height);
+            return GetDatas(0, 0, RenderTexture.width, RenderTexture.height);
         }
 
         public Color[] GetDatas(int x, int y, int width, int height)
         {
-            Texture2D texture = new Texture2D(width, height, lowPrescision ? TextureFormat.RG16 : TextureFormat.RG32, false);
+            Texture2D texture = new Texture2D(width, height, lowPrecision ? TextureFormat.RG16 : TextureFormat.RG32, false);
             Rect rectReadPicture = new Rect(0, 0, width, height);
          
-            RenderTexture.active = m_renderTexture;
+            RenderTexture.active = RenderTexture;
          
             // Read pixels
             texture.ReadPixels(rectReadPicture, 0, 0);
@@ -163,36 +165,37 @@ namespace FogOfWarPackage
                 return;
 #endif
             int resol = Resolution;
-            m_renderTexture = new RenderTexture(resol, resol, 0,
-                lowPrescision ? RenderTextureFormat.RG16 : RenderTextureFormat.RG32);
-            m_renderTexture.enableRandomWrite = true;
-            m_renderTexture.filterMode = FilterMode.Point;
-            m_renderTexture.wrapMode = TextureWrapMode.Clamp;
-            m_renderTexture.Create();
+            RenderTexture = new RenderTexture(resol, resol, 0,
+                lowPrecision ? RenderTextureFormat.RG16 : RenderTextureFormat.RG32)
+            {
+                enableRandomWrite = true, filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp
+            };
+            RenderTexture.Create();
             
 #if UNITY_EDITOR
                 if (m_drawDebug)
-                    m_terrain.materialTemplate.SetTexture(s_shaderPropertyTexture, m_renderTexture);
+                    Terrain.materialTemplate.SetTexture(s_shaderPropertyTexture, RenderTexture);
 #endif
         }
-        
-        public static Vector2 Remap01(Vector2 value, Vector2 pos, Vector2 size)
+
+        private static Vector2 Remap01(Vector2 value, Vector2 pos, Vector2 size)
         {
             return (value - pos) / size;
         }
 
-        public void UpdateBuffer()
+        private void UpdateBuffer()
         {
             List<Vector4> buffer = new List<Vector4>(m_fogOfWarEntities.Count);
 
-            TerrainData terrainData = m_terrain.terrainData;
+            TerrainData terrainData = Terrain.terrainData;
             Vector2 terrainSize = new Vector2(terrainData.size.x, terrainData.size.z);
-            Vector2 terrainMinPos = new Vector2(m_terrain.GetPosition().x, m_terrain.GetPosition().z);
+            Vector2 terrainMinPos = new Vector2(Terrain.GetPosition().x, Terrain.GetPosition().z);
             Vector2 terrainMaxPos = terrainMinPos + terrainSize;
-            
+            Vector2 positionOffset = terrainSize / (2f * Resolution);
+
             foreach (IFogOfWarEntity entity in m_fogOfWarEntities)
             {
-                Vector2 entityPos = entity.GetVisibilityPosition();
+                Vector2 entityPos = entity.GetVisibilityPosition() - positionOffset;
                 float mainRadius = entity.GetVisibilityRadius();
                 float subRadius = entity.GetPermanentVisibilityRadius();
 
@@ -212,9 +215,8 @@ namespace FogOfWarPackage
             m_Datas?.SetData(buffer);
         }
 
-        public void UpdateComputeBuffer(int size)
+        private void UpdateComputeBuffer(int size)
         {
-            bool canClear = false;
             if (m_Datas != null)
             {
                 if (m_Datas.count == size)
@@ -222,36 +224,20 @@ namespace FogOfWarPackage
                 
                 m_Datas.Dispose();
                 m_Datas = null;
-                canClear = true;
             }
 
             if (size > 0)
                 m_Datas = new ComputeBuffer(size, 4 * 4);
-            else if (canClear)
-            {
-                //Clear render texture
-                GenerateRenderTexture();
-            }
         }
 
-        public void RegisterEntity(IFogOfWarEntity fogOfWarEntity)
-        {
-            m_fogOfWarEntities.Add(fogOfWarEntity);
-        }
-
-        public void UnregisterEntity(IFogOfWarEntity fogOfWarEntity)
-        {
-            m_fogOfWarEntities.Remove(fogOfWarEntity);
-        }
-        
         // From https://stackoverflow.com/questions/11196700/math-pow-taking-an-integer-value
-        public static int TwoPowX(int power)
+        private static int TwoPowX(int power)
         {
             return 1 << power;
         }
         
         // From https://codereview.stackexchange.com/questions/145809/high-performance-branchless-intersection-testing-sphere-aabb-aabb-aabb
-        static bool IsDiscInsideAABB(Vector2 discCenter, float discRadius, Vector2 rectMin, Vector2 rectMax)
+        private static bool IsDiscInsideAABB(Vector2 discCenter, float discRadius, Vector2 rectMin, Vector2 rectMax)
         {
             float ex = Mathf.Max(rectMin.x - discCenter.x, 0f) + Mathf.Max(discCenter.x - rectMax.x, 0f);
             float ey = Mathf.Max(rectMin.y - discCenter.y, 0f) + Mathf.Max(discCenter.y - rectMax.y, 0f);

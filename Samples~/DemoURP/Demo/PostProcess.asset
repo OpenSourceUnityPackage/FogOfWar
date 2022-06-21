@@ -16,7 +16,7 @@ MonoBehaviour:
   settings:
     IsEnabled: 1
     WhenToInsert: 550
-    material: {fileID: 2100000, guid: 1534b02085d383a48bb4d226315bbc22, type: 2}
+    shader: {fileID: 4800000, guid: 75a6cdd6cfefb164fa40623c3b399fbb, type: 3}
     terrainFogOfWars:
     - {fileID: 0}
 --- !u!114 &11400000

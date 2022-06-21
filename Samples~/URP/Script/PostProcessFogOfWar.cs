@@ -6,23 +6,23 @@ namespace FogOfWarPackage
 {
     public class PostProcessFogOfWar : ScriptableRenderPass
     {
-        string profilerTag;
-        
-        Material materialFOW;
-        RenderTargetIdentifier source;
-        RenderTargetHandle tempTexture;
-        TerrainFogOfWar[] terrainsFogOfWar;
+        private readonly string profilerTag;
+
+        private readonly Material materialFOW;
+        private RenderTargetIdentifier source;
+        private RenderTargetHandle tempTexture;
+        private readonly TerrainFogOfWar[] terrainsFogOfWar;
 
         private static readonly int FogOfWarProp = Shader.PropertyToID("_FogOfWar");
         private static readonly int TerrainSizePosProp = Shader.PropertyToID("_TerrainSizePos");
 
         public PostProcessFogOfWar(string profilerTag,
-            RenderPassEvent renderPassEvent, Material materialFow, TerrainFogOfWar[] terrainFogOfWars)
+            RenderPassEvent renderPassEvent, Material materialFOW, TerrainFogOfWar[] terrainsFogOfWar)
         {
             this.profilerTag = profilerTag;
             this.renderPassEvent = renderPassEvent;
-            this.materialFOW = materialFow;
-            this.terrainsFogOfWar = terrainFogOfWars;
+            this.materialFOW = materialFOW;
+            this.terrainsFogOfWar = terrainsFogOfWar;
         }
 
         public void Setup(RenderTargetIdentifier source)

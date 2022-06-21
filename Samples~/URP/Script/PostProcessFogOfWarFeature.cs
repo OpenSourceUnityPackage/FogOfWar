@@ -11,13 +11,20 @@ namespace FogOfWarPackage
         {
             public bool IsEnabled = true;
             public RenderPassEvent WhenToInsert = RenderPassEvent.BeforeRenderingPostProcessing;
-            public Material material;
+            public Shader shader;
             [HideInInspector] public TerrainFogOfWar[] terrainFogOfWars;
         }
 
         public FeatureSettings settings = new FeatureSettings();
 
-        PostProcessFogOfWar m_fogRenderPass;
+        private PostProcessFogOfWar m_fogRenderPass;
+
+        public void Awake()
+        {
+            // default value
+            if (settings.shader == null)
+                settings.shader = Shader.Find("PostProcess/URPFogOfWar");
+        }
 
         public override void Create()
         {
@@ -26,7 +33,7 @@ namespace FogOfWarPackage
                 m_fogRenderPass = new PostProcessFogOfWar(
                     "Fog of war pass",
                     settings.WhenToInsert,
-                    settings.material,
+                    new Material(settings.shader),
                     settings.terrainFogOfWars
                 );
             }
