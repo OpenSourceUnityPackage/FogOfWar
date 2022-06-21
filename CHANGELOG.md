@@ -1,3 +1,13 @@
+## [1.2.2](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.2.1...1.2.2) (2022-06-21)
+
+
+### Bug Fixes
+
+* fix root namespace break dependencies ([92ff4c2](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/92ff4c22057bb25fd4125c2006fc1e2790faf7d0))
+* fix spelling mistake and reference ([bc554b4](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/bc554b4b3ad29eac1c454bfd499e17b597e8b3d8))
+* **HDRP:** fix fox visible in background ([be575c8](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/be575c8161e5c1b5dfea413ed7038a8995251cd2))
+* **URP:** simplify URP, fix mistake and fix map displayed in background ([42186bf](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/42186bf773aac011d376b9413a0cbf17824cc399))
+
 ## [1.2.1](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.2.0...1.2.1) (2022-06-08)
 
 
