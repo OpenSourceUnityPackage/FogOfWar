@@ -22,15 +22,18 @@
 
 ## What is it ?
 This package allows you to easily integrate the fog of war with your terrain component.  
+![Capture d’écran 2022-06-23 225326](https://user-images.githubusercontent.com/55276408/175397798-bac89b2d-e1a9-4d00-9f78-2378468c39fc.png)
 
 ## How to use ?
 Don't forget to import a URP or HDRP sample depending on your needs.   
 These will contain resources for integrating Fog of War into your rendering pipeline.  
 If you need a demo, you can import the demo through the package manager.  
+![Capture d’écran 2022-06-23 213023](https://user-images.githubusercontent.com/55276408/175396850-8f7c0cbc-1322-443a-9113-9d7a9f517c4d.png)
 
 ### URP
 For URP, you must first ensure that the URP sample has been imported into your project and of course that the URP package is installed in your project.  
 Then create a forward renderer data and add the Post process fog of war function to it.  
+![Capture d’écran 2022-06-23 214146](https://user-images.githubusercontent.com/55276408/175396911-ce7ad290-5b8f-4cec-acdc-efd59c168e7b.png)
 
 Now create a Universal Render Pipeline asset and link your forward render data to it.
 
@@ -71,11 +74,10 @@ The HDRP is ready, you now need to link your terrain to your asset in this way:
     }
 ```
 
-
-
 ### General
 For both URP and HDRP, add a fog of war script to your scene with the same gameObject as your terrain component.  
 The fog of war script allows you to control the resolution of the textures.
+![Capture d’écran 2022-06-23 214209](https://user-images.githubusercontent.com/55276408/175396932-5e4f57bc-5a16-4e8c-9f3d-005370595818.png)
 
 In your game manager, you need to get your script and define your list of entities inherited from IFogOfWarEntity.
 For example in the GameManager singleton, each spawn or destroy unit calls these functions:
@@ -90,6 +92,8 @@ For example in the GameManager singleton, each spawn or destroy unit calls these
         terrainFogOfWar.UnregisterEntity(unit);
     }
 ```
+You can also get fog of war data to hide object for example. See example in sample.
+
 ## Implementation
 The fog of war uses a render texture to be drawn.  
 This renderTexture is filled with a compute shader and is used by the screen space post-processing effect. 
