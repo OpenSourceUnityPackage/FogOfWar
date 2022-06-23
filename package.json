@@ -15,7 +15,7 @@
   },
   "dependencies": {},
   "keywords": [
-    ""
+    "Fog", "Shader", "RTS", "VFX"
   ],
   "samples": [
     {
@@ -27,6 +27,25 @@
       "displayName": "URP",
       "description": "Contains sample shaders for the Universal render pipeline",
       "path": "Samples~/URP"
+
+    },
+    {
+      "displayName": "Demo HDRP",
+      "description": "Demo for HDRP",
+      "path": "Samples~/DemoHDRP",
+      "dependencies":
+      {
+        "com.unity.render-pipelines.high-definition": "10.8.1"
+      }
+    },
+    {
+      "displayName": "HDRP",
+      "description": "Contains sample shaders for HDRP",
+      "path": "Samples~/HDRP",
+      "dependencies":
+      {
+        "com.unity.render-pipelines.high-definition": "10.8.1"
+      }
     }
   ],
   "release": {
