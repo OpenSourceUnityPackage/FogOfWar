@@ -1,3 +1,11 @@
+# [1.3.0](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.2.2...1.3.0) (2022-06-23)
+
+
+### Features
+
+* Add HDRP sample and keywords ([bc4c6ba](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/bc4c6ba96f884aee9bf3b6158aa8dc2283122e36))
+* Improve documentation ([ce59629](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/ce5962928e1ce04f2e53ac55152c0e34557aa4e9))
+
 ## [1.2.2](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.2.1...1.2.2) (2022-06-21)
 
 
