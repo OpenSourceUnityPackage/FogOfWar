@@ -77,7 +77,6 @@ The HDRP is ready, you now need to link your terrain to your asset in this way:
 ### General
 For both URP and HDRP, add a fog of war script to your scene with the same gameObject as your terrain component.  
 The fog of war script allows you to control the resolution of the textures.
-![Capture d’écran 2022-06-23 214209](https://user-images.githubusercontent.com/55276408/175396932-5e4f57bc-5a16-4e8c-9f3d-005370595818.png)
 
 In your game manager, you need to get your script and define your list of entities inherited from IFogOfWarEntity.
 For example in the GameManager singleton, each spawn or destroy unit calls these functions:
