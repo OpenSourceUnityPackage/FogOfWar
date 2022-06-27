@@ -79,14 +79,15 @@ namespace FogOfWarPackage
                         return;
                     TerrainData terrainData = terrain.terrainData;
 
-                    m_Material.SetFloat(IntensityProp, intensity.value);
-                    m_Material.SetTexture(InputTextureProp, source);
-                    m_Material.SetTexture(FogOfWarProp, terrainFogOfWar.RenderTexture);
-                    m_Material.SetVector(TerrainSizePosProp,
+                    MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
+                    propertyBlock.SetFloat(IntensityProp, intensity.value);
+                    propertyBlock.SetTexture(InputTextureProp, source);
+                    propertyBlock.SetTexture(FogOfWarProp, terrainFogOfWar.RenderTexture);
+                    propertyBlock.SetVector(TerrainSizePosProp,
                         new Vector4(terrain.GetPosition().x, terrain.GetPosition().z, 1 / terrainData.size.x,
                             1 / terrainData.size.z));
-                    
-                    HDUtils.DrawFullScreen(cmd, m_Material, destination);
+
+                    HDUtils.DrawFullScreen(cmd, m_Material, destination, propertyBlock);
                 }
             }
         }
