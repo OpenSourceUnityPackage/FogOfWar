@@ -57,11 +57,10 @@ Shader "Hidden/Shader/FogOfWarPostProcess"
         float3 outColor = LOAD_TEXTURE2D_X(_InputTexture, positionSS).xyz;
 
         float depth = LoadCameraDepth(input.positionCS.xy);
-
-        // Reconstruct the world space positions.
-        float3 worldPos = ComputeWorldSpacePosition(input.texcoord, depth, UNITY_MATRIX_I_VP);
-
-        float2 fowTC = (worldPos.xz + _TerrainSizePos.xy) * _TerrainSizePos.zw;
+        float2 positionNDC = input.positionCS.xy * _ScreenSize.zw;
+        float3 positionWS = GetAbsolutePositionWS(ComputeWorldSpacePosition(positionNDC, depth, UNITY_MATRIX_I_VP));
+        
+        float2 fowTC = (positionWS.xz - _TerrainSizePos.xy) * _TerrainSizePos.zw;
         half fow = GetFogOfWarFactor(fowTC, depth);
         outColor = outColor * fow;
 
