@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.3.1...1.3.2) (2022-06-27)
+
+
+### Bug Fixes
+
+* **HDRP:** multi terrain support ([93ae16b](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/93ae16bc1c4c378d1a8141c18054f497561c1b14))
+
 ## [1.3.1](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.3.0...1.3.1) (2022-06-27)
 
 

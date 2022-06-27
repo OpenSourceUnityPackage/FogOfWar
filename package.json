@@ -2,7 +2,7 @@
   "name": "open-source-unity-package.fog-of-war",
   "displayName": "FogOfWar",
   "description": "Fog of war post process effect for unity URP/HDRP",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "unity": "2020.3",
   "license": "MIT",
   "repository": {
