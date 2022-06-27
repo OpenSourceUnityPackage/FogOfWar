@@ -45,6 +45,10 @@ Shader "Hidden/Shader/FogOfWarPostProcess"
 
         // Check with depth allow to avoid to render fow in unit square on the background
         const bool isOutside = tc.x < 0 || tc.x > 1 || tc.y < 0 || tc.y > 1 || depth == 0.0f;
+
+        if (isOutside)
+            discard;
+        
         const half2 rg = lerp(tex2D(_FogOfWar, tc).rg, half2(1, 1), isOutside);
         return lerp(rg.r, rg.g, SUB_FOG_INTENSITY_COEF);
     }
