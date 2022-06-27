@@ -69,7 +69,7 @@ Shader "PostProcess/URPFogOfWar"
                 // Reconstruct the world space positions.
                 float3 worldPos = ComputeWorldSpacePosition(UV, depth, UNITY_MATRIX_I_VP);
                 
-                float2 fowTC = (worldPos.xz + _TerrainSizePos.xy) * _TerrainSizePos.zw;
+                float2 fowTC = (worldPos.xz - _TerrainSizePos.xy) * _TerrainSizePos.zw;
                 half fow = GetFogOfWarFactor(fowTC, depth);
                 half4 col = tex2D(_MainTex, UV) * fow;
                 return col;

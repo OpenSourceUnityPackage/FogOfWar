@@ -143,7 +143,7 @@ namespace FogOfWarPackage
         public Color[] GetDatas(int x, int y, int width, int height)
         {
             Texture2D texture = new Texture2D(width, height, lowPrecision ? TextureFormat.RG16 : TextureFormat.RG32, false);
-            Rect rectReadPicture = new Rect(0, 0, width, height);
+            Rect rectReadPicture = new Rect(x, y, width, height);
          
             RenderTexture.active = RenderTexture;
          
@@ -168,7 +168,7 @@ namespace FogOfWarPackage
             RenderTexture = new RenderTexture(resol, resol, 0,
                 lowPrecision ? RenderTextureFormat.RG16 : RenderTextureFormat.RG32)
             {
-                enableRandomWrite = true, filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp
+                enableRandomWrite = true, filterMode = FilterMode.Bilinear, wrapMode = TextureWrapMode.Clamp
             };
             RenderTexture.Create();
             

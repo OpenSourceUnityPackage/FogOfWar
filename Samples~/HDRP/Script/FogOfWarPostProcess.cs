@@ -83,7 +83,7 @@ namespace FogOfWarPackage
                     m_Material.SetTexture(InputTextureProp, source);
                     m_Material.SetTexture(FogOfWarProp, terrainFogOfWar.RenderTexture);
                     m_Material.SetVector(TerrainSizePosProp,
-                        new Vector4(terrainData.size.x / 2 - terrain.GetPosition().x, terrainData.size.z / 2 - terrain.GetPosition().z, 1 / terrainData.size.x,
+                        new Vector4(terrain.GetPosition().x, terrain.GetPosition().z, 1 / terrainData.size.x,
                             1 / terrainData.size.z));
                     
                     HDUtils.DrawFullScreen(cmd, m_Material, destination);
