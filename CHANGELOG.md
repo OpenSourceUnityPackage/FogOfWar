@@ -1,3 +1,12 @@
+## [1.3.1](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.3.0...1.3.1) (2022-06-27)
+
+
+### Bug Fixes
+
+* **HDRP:** fix camera in relative position and terrain position ([865baa1](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/865baa126096227999ab4d7af0d19000d101426f))
+* set bilinear mode and fix GetData x, y unused ([d83e6e0](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/d83e6e04f48808260816e035f638be30fa6e5d5f))
+* **URP:** fix terrain position in shader ([732f78d](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/732f78d7aa06e70cf007bdbce1aa25be31e571aa))
+
 # [1.3.0](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.2.2...1.3.0) (2022-06-23)
 
 
