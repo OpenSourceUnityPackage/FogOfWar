@@ -3,7 +3,6 @@ using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Rendering;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -13,8 +12,10 @@ namespace FogOfWarPackage
     [RequireComponent(typeof(Terrain))]
     public class TerrainFogOfWar : MonoBehaviour
     {
-        public ComputeShader m_computeShader;
-        
+        [SerializeField]
+        private ComputeShader m_computeShader;
+        private int m_kernelIndex;
+
         [SerializeField, OnRangeChangedCall(3, 14, "GenerateRenderTexture")]
         [Tooltip("2^resolution is the size of renderTexture used. 3 is size of 8, 4 is 16, 5 is 32...")]
         private int resolution = 8;
@@ -24,7 +25,6 @@ namespace FogOfWarPackage
         private readonly List<IFogOfWarEntity> m_fogOfWarEntities = new List<IFogOfWarEntity>();
 
         private ComputeBuffer m_Datas;
-        private int m_kernelIndex;
 
         static readonly ProfilerMarker s_PreparePerfMarker =
             new ProfilerMarker(ProfilerCategory.Render, "TerrainFogOfWar.Update");
@@ -35,6 +35,7 @@ namespace FogOfWarPackage
         private static readonly int s_shaderPropertyTextureOut = Shader.PropertyToID("_TextureOut");
 
         private const string s_cmdName = "Process fog of war";
+        private const string s_kernelName = "mainFogOfWar";
 
         public int Resolution
         {
@@ -45,13 +46,24 @@ namespace FogOfWarPackage
                 GenerateRenderTexture();
             }
         }
+        
+        public ComputeShader ComputeShader
+        {
+            set
+            {
+                m_computeShader = value;
+                m_kernelIndex = m_computeShader.FindKernel(s_kernelName);
+            }
+        }
+        
 #if UNITY_EDITOR
         private static readonly int s_shaderPropertyTexture = Shader.PropertyToID("_Texture");
 
         [SerializeField] private bool m_drawDebug = false;
 
         private bool m_prevDrawDebug = false;
-
+        private ComputeShader m_prevComputeShader;
+        
         private Material m_prevTerrainMaterial;
         private Material m_debugMaterial;
 #endif
@@ -62,7 +74,6 @@ namespace FogOfWarPackage
         #region MonoBehaviour
         private void Awake()
         {
-            m_kernelIndex = m_computeShader.FindKernel("mainFogOfWar");
             Terrain = GetComponent<Terrain>();
             Assert.IsFalse(Terrain.terrainData.size.x != Terrain.terrainData.size.z, "Terrain need to be squared to process disc as fast as possible");
         }
@@ -101,8 +112,17 @@ namespace FogOfWarPackage
                 commandBuffer.DispatchCompute(m_computeShader, m_kernelIndex, resol / 8, resol / 8, 1);
                 Graphics.ExecuteCommandBuffer(commandBuffer);
             }
-
+        }
+        
 #if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (m_prevComputeShader != m_computeShader)
+            {
+                m_prevComputeShader = m_computeShader;
+                m_kernelIndex = m_computeShader.FindKernel(s_kernelName);
+            }
+            
             if (m_prevDrawDebug != m_drawDebug)
             {
                 m_prevDrawDebug = m_drawDebug;
@@ -121,8 +141,8 @@ namespace FogOfWarPackage
                     Terrain.materialTemplate = m_prevTerrainMaterial;
                 }
             }
-#endif
         }
+#endif
 #endregion
 
         public void RegisterEntity(IFogOfWarEntity fogOfWarEntity)
@@ -153,7 +173,7 @@ namespace FogOfWarPackage
          
             RenderTexture.active = null; // added to avoid errors
             Color[] rst = texture.GetPixels();
-            Texture2D.Destroy(texture);
+            Destroy(texture);
 
             return rst;
         }
