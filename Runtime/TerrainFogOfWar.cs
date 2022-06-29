@@ -74,6 +74,9 @@ namespace FogOfWarPackage
         #region MonoBehaviour
         private void Awake()
         {
+            if (m_computeShader != null)
+                m_kernelIndex = m_computeShader.FindKernel(s_kernelName);
+            
             Terrain = GetComponent<Terrain>();
             Assert.IsFalse(Terrain.terrainData.size.x != Terrain.terrainData.size.z, "Terrain need to be squared to process disc as fast as possible");
         }
