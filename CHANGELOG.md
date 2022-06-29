@@ -1,3 +1,27 @@
+## [1.3.2](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.3.1...1.3.2) (2022-06-27)
+
+
+### Bug Fixes
+
+* **HDRP:** multi terrain support ([93ae16b](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/93ae16bc1c4c378d1a8141c18054f497561c1b14))
+
+## [1.3.1](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.3.0...1.3.1) (2022-06-27)
+
+
+### Bug Fixes
+
+* **HDRP:** fix camera in relative position and terrain position ([865baa1](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/865baa126096227999ab4d7af0d19000d101426f))
+* set bilinear mode and fix GetData x, y unused ([d83e6e0](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/d83e6e04f48808260816e035f638be30fa6e5d5f))
+* **URP:** fix terrain position in shader ([732f78d](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/732f78d7aa06e70cf007bdbce1aa25be31e571aa))
+
+# [1.3.0](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.2.2...1.3.0) (2022-06-23)
+
+
+### Features
+
+* Add HDRP sample and keywords ([bc4c6ba](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/bc4c6ba96f884aee9bf3b6158aa8dc2283122e36))
+* Improve documentation ([ce59629](https://github.com/OpenSourceUnityPackage/FogOfWar/commit/ce5962928e1ce04f2e53ac55152c0e34557aa4e9))
+
 ## [1.2.2](https://github.com/OpenSourceUnityPackage/FogOfWar/compare/1.2.1...1.2.2) (2022-06-21)
 
 

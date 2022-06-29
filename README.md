@@ -62,6 +62,9 @@ URP is ready, you now need to link your terrain with your asset like this:
 ### HDRP
 To enable the fog of war feature in the HDRP, create a volume profile. Add the Post-processing/custom/fogOfWarPostProcess override.  
 Now add a volume component to your scene and attach your new profile to it.  
+Then, you need go into Settings/HDRP Default Settings and add in Custom post process order the fog of war feature in After post process.  
+![Capture d’écran 2022-06-26 221448](https://user-images.githubusercontent.com/55276408/175832330-6fc5f5e7-f1d2-4eac-9736-1fbe693a20cd.png)
+
 The HDRP is ready, you now need to link your terrain to your asset in this way:
 ```c#
     [SerializeField] TerrainFogOfWar[] FogTeam1;
@@ -76,10 +79,9 @@ The HDRP is ready, you now need to link your terrain to your asset in this way:
 
 ### General
 For both URP and HDRP, add a fog of war script to your scene with the same gameObject as your terrain component.  
-The fog of war script allows you to control the resolution of the textures.
-![Capture d’écran 2022-06-23 214209](https://user-images.githubusercontent.com/55276408/175396932-5e4f57bc-5a16-4e8c-9f3d-005370595818.png)
-
-In your game manager, you need to get your script and define your list of entities inherited from IFogOfWarEntity.
+The fog of war script allows you to control the resolution of the textures.  
+![Capture d’écran 2022-06-26 221505](https://user-images.githubusercontent.com/55276408/175832340-6a2f7ff8-44f3-4816-b359-992496a37e3e.png)
+In your game manager, you need to get your script and define your list of entities inherited from IFogOfWarEntity.  
 For example in the GameManager singleton, each spawn or destroy unit calls these functions:
 ```c#
     public void RegisterUnit(Unit unit)

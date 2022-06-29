@@ -2,7 +2,7 @@
   "name": "open-source-unity-package.fog-of-war",
   "displayName": "FogOfWar",
   "description": "Fog of war post process effect for unity URP/HDRP",
-  "version": "1.2.2",
+  "version": "1.3.2",
   "unity": "2020.3",
   "license": "MIT",
   "repository": {
@@ -15,7 +15,10 @@
   },
   "dependencies": {},
   "keywords": [
-    "Fog", "Shader", "RTS", "VFX"
+    "Fog",
+    "Shader",
+    "RTS",
+    "VFX"
   ],
   "samples": [
     {
@@ -27,14 +30,12 @@
       "displayName": "URP",
       "description": "Contains sample shaders for the Universal render pipeline",
       "path": "Samples~/URP"
-
     },
     {
       "displayName": "Demo HDRP",
       "description": "Demo for HDRP",
       "path": "Samples~/DemoHDRP",
-      "dependencies":
-      {
+      "dependencies": {
         "com.unity.render-pipelines.high-definition": "10.8.1"
       }
     },
@@ -42,8 +43,7 @@
       "displayName": "HDRP",
       "description": "Contains sample shaders for HDRP",
       "path": "Samples~/HDRP",
-      "dependencies":
-      {
+      "dependencies": {
         "com.unity.render-pipelines.high-definition": "10.8.1"
       }
     }
